@@ -1,11 +1,11 @@
 <h1>Your Guest List</h1>
 
 %{
-guests = `{redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[:GUEST]->(g:user),
-                                    (u:user {username: '''$logged_user'''})-[m:MATCH]->(g:user)
+guests = `{redis graph write 'MATCH (u:user {username: '''$logged_user'''})-[:GUEST]->(g:user)
                               WHERE NOT (u)-[:FRIENDS]-(g) AND
                                     NOT (u)-[:WAVED]->(g) AND
                                     NOT (u)-[:PASSED]->(g)
+                              OPTIONAL MATCH (u)-[m:MATCH]->(g:user)
                               MERGE (u)-[s:SEEN]->(g)
                               ON CREATE SET s.date = '$dateun'
                               RETURN g.username
